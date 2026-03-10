@@ -1,0 +1,37 @@
+{
+  "collectionName": "components_shared_specifications",
+  "info": {
+    "displayName": "specifications"
+  },
+  "options": {},
+  "attributes": {
+    "power": {
+      "type": "string"
+    },
+    "color": {
+      "type": "string"
+    },
+    "origin": {
+      "type": "string"
+    },
+    "coolingPower": {
+      "type": "string"
+    },
+    "heatingPower": {
+      "type": "string"
+    },
+    "noiseLevel": {
+      "type": "string"
+    },
+    "refrigerant": {
+      "type": "string"
+    },
+    "dimensions": {
+      "type": "string"
+    },
+    "weight": {
+      "type": "string"
+    }
+  },
+  "config": {}
+}
