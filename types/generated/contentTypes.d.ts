@@ -563,6 +563,34 @@ export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiFeatureFeature extends Struct.CollectionTypeSchema {
+  collectionName: 'features';
+  info: {
+    displayName: 'Feature';
+    pluralName: 'features';
+    singularName: 'feature';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::feature.feature'
+    > &
+      Schema.Attribute.Private;
+    name: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiGlobalGlobal extends Struct.SingleTypeSchema {
   collectionName: 'globals';
   info: {
@@ -607,7 +635,7 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
   };
   attributes: {
     badge: Schema.Attribute.String;
-    brand: Schema.Attribute.Relation<'oneToOne', 'api::article.article'>;
+    brand: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -626,13 +654,14 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
     Specifications: Schema.Attribute.Component<'shared.specifications', false>;
     type: Schema.Attribute.Enumeration<
       [
-        '\u0418\u043D\u0432\u0435\u0440\u0442\u043E\u0440\u043D\u0438',
-        '\u041F\u043E\u0434\u043E\u0432\u0438',
-        '\u041A\u0430\u0441\u0435\u0442\u044A\u0447\u043D\u0438',
+        '\u0418\u043D\u0432\u0435\u0440\u0442\u043E\u0440\u0435\u043D',
+        '\u0425\u0438\u043F\u0435\u0440\u0438\u043D\u0432\u0435\u0440\u0442\u043E\u0440\u0435\u043D',
+        '\u041F\u043E\u0434\u043E\u0432',
+        '\u041A\u0430\u0441\u0435\u0442\u044A\u0447\u0435\u043D',
         '\u041C\u0443\u043B\u0442\u0438\u0441\u043F\u043B\u0438\u0442',
-        '\u041A\u0430\u043D\u0430\u043B\u043D\u0438',
-        '\u041A\u043E\u043B\u043E\u043D\u043D\u0438',
-        '\u041F\u0440\u0435\u043D\u043E\u0441\u0438\u043C\u0438',
+        '\u041A\u0430\u043D\u0430\u043B\u0435\u043D',
+        '\u041A\u043E\u043B\u043E\u043D\u0435\u043D',
+        '\u041F\u0440\u0435\u043D\u043E\u0441\u0438\u043C',
       ]
     >;
     updatedAt: Schema.Attribute.DateTime;
@@ -1156,6 +1185,7 @@ declare module '@strapi/strapi' {
       'api::article.article': ApiArticleArticle;
       'api::author.author': ApiAuthorAuthor;
       'api::category.category': ApiCategoryCategory;
+      'api::feature.feature': ApiFeatureFeature;
       'api::global.global': ApiGlobalGlobal;
       'api::product.product': ApiProductProduct;
       'plugin::content-releases.release': PluginContentReleasesRelease;

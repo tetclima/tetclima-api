@@ -5,31 +5,100 @@
   },
   "options": {},
   "attributes": {
-    "power": {
+    "class": {
       "type": "string"
     },
-    "color": {
+    "room_size": {
       "type": "string"
     },
-    "origin": {
+    "cooling_energy_class": {
       "type": "string"
     },
-    "coolingPower": {
+    "heating_energy_class": {
       "type": "string"
     },
-    "heatingPower": {
+    "power_btu": {
       "type": "string"
     },
-    "noiseLevel": {
+    "recommended_cooling_volume": {
+      "type": "string"
+    },
+    "recommended_heating_volume": {
+      "type": "string"
+    },
+    "cooling_power": {
+      "type": "string"
+    },
+    "heating_power": {
+      "type": "string"
+    },
+    "power_consumption_cooling": {
+      "type": "string"
+    },
+    "power_consumption_heating": {
+      "type": "string"
+    },
+    "power_supply_voltage": {
+      "type": "string"
+    },
+    "seer": {
+      "type": "string"
+    },
+    "scop": {
+      "type": "string"
+    },
+    "indoor_noise_level": {
+      "type": "string"
+    },
+    "outdoor_noise_level": {
+      "type": "string"
+    },
+    "indoor_unit_dimensions": {
+      "type": "string"
+    },
+    "outdoor_unit_dimensions": {
+      "type": "string"
+    },
+    "indoor_unit_weight": {
+      "type": "string"
+    },
+    "outdoor_unit_weight": {
+      "type": "string"
+    },
+    "cooling_operating_range": {
+      "type": "string"
+    },
+    "heating_operating_range": {
       "type": "string"
     },
     "refrigerant": {
       "type": "string"
     },
-    "dimensions": {
+    "color": {
       "type": "string"
     },
-    "weight": {
+    "country_of_origin": {
+      "type": "string"
+    },
+    "pipe_diameter": {
+      "type": "string"
+    },
+    "max_height_difference": {
+      "type": "string"
+    },
+    "power_supply_location": {
+      "type": "string"
+    },
+    "max_pipe_length": {
+      "type": "string"
+    },
+    "wifi_control": {
+      "type": "string"
+    },
+    "eer_cooling": {
+      "type": "string"
+    },
+    "cop_heating": {
       "type": "string"
     }
   },

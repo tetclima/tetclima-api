@@ -32,6 +32,26 @@ npm run build
 yarn build
 ```
 
+### Import products from `products.json`
+
+Air conditioner rows in the root file `products.json` can be pushed into the **Product** collection via the REST API.
+
+1. Start Strapi: `npm run develop`
+2. Create an **API Token**: Admin → **Settings** → **API Tokens** → Create (e.g. *Full access* or *Custom* with `create` on Product).
+3. From this folder run:
+
+```bash
+STRAPI_API_TOKEN=your_token_here npm run import:products
+```
+
+Optional: `STRAPI_URL=https://your-server.com` if Strapi is not on `http://localhost:1337`.
+
+Optional: `PRODUCTS_JSON=/absolute/path/to/products.json` if your file is not `tetclima-api/products.json`.
+
+**Troubleshooting:** `Unexpected end of JSON input` means `products.json` was **empty** on disk — save the file in your editor, or fix the path. The API token must be the **long secret** from Strapi (copy when created), not the literal text `Full_Access`.
+
+Images are not in the JSON file — add **image** media for each product in the Admin after import.
+
 ## ⚙️ Deployment
 
 Strapi gives you many possible deployment options for your project including [Strapi Cloud](https://cloud.strapi.io). Browse the [deployment section of the documentation](https://docs.strapi.io/dev-docs/deployment) to find the best solution for your use case.
