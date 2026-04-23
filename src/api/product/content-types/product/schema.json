@@ -32,7 +32,7 @@
     },
     "image": {
       "type": "media",
-      "multiple": false,
+      "multiple": true,
       "allowedTypes": [
         "images",
         "files",
@@ -56,6 +56,9 @@
       "type": "component",
       "component": "shared.specifications",
       "repeatable": false
+    },
+    "isRefurbished": {
+      "type": "boolean"
     }
   }
 }
