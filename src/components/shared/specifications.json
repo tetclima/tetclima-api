@@ -11,40 +11,40 @@
     "room_size": {
       "type": "string"
     },
-    "cooling_energy_class": {
+    "heating_energy_class": {
       "type": "string"
     },
-    "heating_energy_class": {
+    "cooling_energy_class": {
       "type": "string"
     },
     "power_btu": {
       "type": "string"
     },
-    "recommended_cooling_volume": {
+    "power_supply_voltage": {
       "type": "string"
     },
     "recommended_heating_volume": {
       "type": "string"
     },
-    "cooling_power": {
+    "recommended_cooling_volume": {
       "type": "string"
     },
     "heating_power": {
       "type": "string"
     },
-    "power_consumption_cooling": {
+    "cooling_power": {
       "type": "string"
     },
     "power_consumption_heating": {
       "type": "string"
     },
-    "power_supply_voltage": {
-      "type": "string"
-    },
-    "seer": {
+    "power_consumption_cooling": {
       "type": "string"
     },
     "scop": {
+      "type": "string"
+    },
+    "seer": {
       "type": "string"
     },
     "indoor_noise_level": {
@@ -65,10 +65,10 @@
     "outdoor_unit_weight": {
       "type": "string"
     },
-    "cooling_operating_range": {
+    "heating_operating_range": {
       "type": "string"
     },
-    "heating_operating_range": {
+    "cooling_operating_range": {
       "type": "string"
     },
     "refrigerant": {
@@ -95,10 +95,10 @@
     "wifi_control": {
       "type": "string"
     },
-    "eer_cooling": {
+    "cop_heating": {
       "type": "string"
     },
-    "cop_heating": {
+    "eer_cooling": {
       "type": "string"
     }
   },

@@ -666,6 +666,7 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
         '\u041A\u0430\u043D\u0430\u043B\u0435\u043D',
         '\u041A\u043E\u043B\u043E\u043D\u0435\u043D',
         '\u041F\u0440\u0435\u043D\u043E\u0441\u0438\u043C',
+        '\u0421\u0442\u0435\u043D\u0435\u043D',
       ]
     >;
     updatedAt: Schema.Attribute.DateTime;
