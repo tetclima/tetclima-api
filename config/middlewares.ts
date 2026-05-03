@@ -1,16 +1,42 @@
 import type { Core } from '@strapi/strapi';
 
-const config: Core.Config.Middlewares = [
-  'strapi::logger',
-  'strapi::errors',
-  'strapi::security',
-  'strapi::cors',
-  'strapi::poweredBy',
-  'strapi::query',
-  'strapi::body',
-  'strapi::session',
-  'strapi::favicon',
-  'strapi::public',
-];
+/**
+ * TetClima (Next.js) calls Strapi from the browser (e.g. Header) and from the server.
+ * Browser calls need CORS: allow local Next dev and any production origins via CORS_ORIGIN
+ * (comma-separated), e.g. CORS_ORIGIN=https://www.example.com,https://example.com
+ */
+export default ({ env }: Core.Config.Shared.ConfigParams): Core.Config.Middlewares => {
+  const extra = env('CORS_ORIGIN', '')
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean);
 
-export default config;
+  const origin = Array.from(
+    new Set([
+      'http://localhost:3000',
+      'http://127.0.0.1:3000',
+      'http://localhost:1337',
+      'http://127.0.0.1:1337',
+      ...extra,
+    ]),
+  );
+
+  return [
+    'strapi::logger',
+    'strapi::errors',
+    'strapi::security',
+    {
+      name: 'strapi::cors',
+      config: {
+        enabled: true,
+        origin,
+      },
+    },
+    'strapi::poweredBy',
+    'strapi::query',
+    'strapi::body',
+    'strapi::session',
+    'strapi::favicon',
+    'strapi::public',
+  ];
+};
