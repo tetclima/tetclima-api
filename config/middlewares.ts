@@ -28,7 +28,6 @@ export default ({ env }: Core.Config.Shared.ConfigParams): Core.Config.Middlewar
     {
       name: 'strapi::cors',
       config: {
-        enabled: true,
         origin,
       },
     },
