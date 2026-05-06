@@ -84,8 +84,8 @@ nbproject
 ############################
 # Strapi uploads (runtime data — do not version; use Render disk or S3)
 ############################
-public/uploads/*
-!public/uploads/.gitkeep
+# public/uploads/*
+# !public/uploads/.gitkeep
 
 .tsbuildinfo
 .eslintcache
