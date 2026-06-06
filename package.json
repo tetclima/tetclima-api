@@ -14,6 +14,7 @@
     "import:product-images": "node ./scripts/attach-product-images-from-export.js",
     "import:media-from-disk": "node ./scripts/register-disk-uploads-to-media-library.js",
     "migrate:uploads-to-supabase": "node ./scripts/migrate-uploads-to-supabase.js",
+    "fix:media-formats-supabase": "node ./scripts/fix-media-formats-supabase.js",
     "test:supabase-s3": "node ./scripts/test-supabase-s3.js",
     "start": "strapi start",
     "strapi": "strapi",

@@ -121,15 +121,66 @@ async function main() {
 
     const localUrl = `/uploads/${name}`;
     const res = await pool.query(
-      `UPDATE files
-       SET url = $1, provider = 'aws-s3', updated_at = NOW()
-       WHERE url = $2 OR url LIKE $3 OR name = $4`,
-      [publicUrl, localUrl, `%/${name}`, name],
+      `SELECT id, formats FROM files
+       WHERE url = $1 OR url LIKE $2 OR name = $3`,
+      [localUrl, `%/${name}`, name],
     );
-    if (res.rowCount > 0) {
-      updated += res.rowCount;
-      console.log(`✓ ${name} → ${publicUrl} (${res.rowCount} DB row(s))`);
-    } else {
+
+    for (const row of res.rows) {
+      let formats = row.formats;
+      if (formats && typeof formats === 'string') {
+        try {
+          formats = JSON.parse(formats);
+        } catch {
+          formats = null;
+        }
+      }
+
+      if (formats && typeof formats === 'object') {
+        for (const formatKey of Object.keys(formats)) {
+          const entry = formats[formatKey];
+          if (!entry?.url || typeof entry.url !== 'string') continue;
+          if (!entry.url.startsWith('/uploads/')) continue;
+          const derivativeName = entry.url.slice('/uploads/'.length);
+          const derivativePath = path.join(dir, derivativeName);
+          if (!fs.existsSync(derivativePath)) {
+            entry.url = publicUrl;
+            continue;
+          }
+          const derivativeUrl = publicObjectUrl(projectRef, bucket, derivativeName);
+          if (!DRY_RUN) {
+            const derivativeBody = fs.readFileSync(derivativePath);
+            const derivativeType =
+              require('mime-types').lookup(derivativeName) || 'application/octet-stream';
+            await s3.send(
+              new PutObjectCommand({
+                Bucket: bucket,
+                Key: derivativeName,
+                Body: derivativeBody,
+                ContentType: derivativeType,
+              }),
+            );
+          }
+          entry.url = derivativeUrl;
+        }
+      }
+
+      if (DRY_RUN) {
+        console.log(`[dry-run] would update ${name} → ${publicUrl}`);
+        continue;
+      }
+
+      await pool.query(
+        `UPDATE files
+         SET url = $1, formats = $2::jsonb, provider = 'aws-s3', updated_at = NOW()
+         WHERE id = $3`,
+        [publicUrl, formats ? JSON.stringify(formats) : null, row.id],
+      );
+      updated += 1;
+      console.log(`✓ ${name} → ${publicUrl}`);
+    }
+
+    if (!res.rows.length) {
       console.log(`✓ uploaded ${name} (no matching files row — upload via Admin if needed)`);
     }
   }
