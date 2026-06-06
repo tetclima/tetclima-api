@@ -21,10 +21,26 @@ export default ({ env }: Core.Config.Shared.ConfigParams): Core.Config.Middlewar
     ]),
   );
 
+  const projectRef = env('SUPABASE_PROJECT_REF', '').trim();
+  const supabaseOrigins = projectRef
+    ? [`https://${projectRef}.supabase.co`, `https://${projectRef}.storage.supabase.co`]
+    : ['https://*.supabase.co'];
+
   return [
     'strapi::logger',
     'strapi::errors',
-    'strapi::security',
+    {
+      name: 'strapi::security',
+      config: {
+        contentSecurityPolicy: {
+          useDefaults: true,
+          directives: {
+            'img-src': ["'self'", 'data:', 'blob:', 'https:', ...supabaseOrigins],
+            'media-src': ["'self'", 'data:', 'blob:', 'https:', ...supabaseOrigins],
+          },
+        },
+      },
+    },
     {
       name: 'strapi::cors',
       config: {

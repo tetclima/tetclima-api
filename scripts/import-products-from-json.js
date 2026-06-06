@@ -126,6 +126,7 @@ function buildData(item) {
     createdAt: _c,
     updatedAt: _u,
     image: _img,
+    imageFileName: _imageFileName,
     ...rest
   } = item;
   const specs =
@@ -220,6 +221,89 @@ async function createProduct(data, index) {
   return body;
 }
 
+function productImageFileName(item) {
+  if (typeof item.imageFileName === "string" && item.imageFileName.trim()) {
+    return item.imageFileName.trim();
+  }
+  if (typeof item.image === "string" && item.image.trim()) {
+    return item.image.trim();
+  }
+  if (Array.isArray(item.image) && item.image[0]) {
+    const first = item.image[0];
+    if (typeof first === "string" && first.trim()) return first.trim();
+    if (first.name) return String(first.name);
+    if (first.url) return path.basename(String(first.url));
+  }
+  return null;
+}
+
+async function findUploadFileByName(fileName) {
+  const base = path.basename(fileName);
+  const queries = [
+    `filters[name][$eq]=${encodeURIComponent(base)}`,
+    `filters[url][$contains]=${encodeURIComponent(base.replace(/\.[^.]+$/, ""))}`,
+  ];
+
+  for (const query of queries) {
+    const url = `${STRAPI_URL}/api/upload/files?${query}&pagination[pageSize]=5`;
+    let res;
+    try {
+      res = await fetch(url, {
+        headers: { Authorization: `Bearer ${API_TOKEN}` },
+      });
+    } catch (e) {
+      throw new Error(formatFetchError(e, url));
+    }
+    const body = await res.json().catch(() => []);
+    if (!res.ok) continue;
+    const files = Array.isArray(body) ? body : body.data || [];
+    const exact = files.find(
+      (file) =>
+        String(file.name || file.attributes?.name || "") === base ||
+        String(file.url || file.attributes?.url || "").includes(base),
+    );
+    if (exact) return exact;
+    if (files.length === 1) return files[0];
+  }
+  return null;
+}
+
+async function attachProductImage(documentId, fileName) {
+  const file = await findUploadFileByName(fileName);
+  if (!file) {
+    throw new Error(
+      `Media not found in Strapi library: ${fileName} (upload it in Admin → Media Library first)`,
+    );
+  }
+
+  const fileId = file.id ?? file.documentId;
+  if (fileId == null) {
+    throw new Error(`Upload entry for ${fileName} has no id`);
+  }
+
+  const putUrl = `${STRAPI_URL}/api/products/${documentId}`;
+  let res;
+  try {
+    res = await fetch(putUrl, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${API_TOKEN}`,
+      },
+      body: JSON.stringify({ data: { image: [fileId] } }),
+    });
+  } catch (e) {
+    throw new Error(formatFetchError(e, putUrl));
+  }
+
+  const body = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    throw new Error(
+      `Failed to attach image ${fileName}: HTTP ${res.status} ${JSON.stringify(body)}`,
+    );
+  }
+}
+
 /** Fails fast with a clear message if Strapi is not listening (common cause of opaque "fetch failed"). */
 async function assertStrapiReachable() {
   const pingUrl = `${STRAPI_URL}/api/products?pagination[pageSize]=1`;
@@ -273,6 +357,11 @@ Create a token in Strapi Admin → Settings → API Tokens, then run:
         created.id ||
         (created.attributes && created.attributes.documentId) ||
         "?";
+      const imageFileName = productImageFileName(item);
+      if (imageFileName && id !== "?") {
+        await attachProductImage(id, imageFileName);
+        console.log(`  ↳ image: ${imageFileName}`);
+      }
       console.log(`✓ [${i + 1}] ${item.brand} ${item.model} → id: ${id}`);
     } catch (e) {
       console.error(`✗ [${i + 1}] Failed: ${item.brand} ${item.model}`);
@@ -281,7 +370,9 @@ Create a token in Strapi Admin → Settings → API Tokens, then run:
     }
   }
 
-  console.log("\nDone. Add product images in Strapi Admin if needed.");
+  console.log(
+    "\nDone. Products without imageFileName in JSON need images added in Strapi Admin.",
+  );
 }
 
 main().catch((e) => {

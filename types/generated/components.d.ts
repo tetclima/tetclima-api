@@ -20,6 +20,8 @@ export interface SharedSpecifications extends Struct.ComponentSchema {
     indoor_noise_level: Schema.Attribute.String;
     indoor_unit_dimensions: Schema.Attribute.String;
     indoor_unit_weight: Schema.Attribute.String;
+    indoor_units_count: Schema.Attribute.String;
+    max_area_sqm: Schema.Attribute.String;
     max_height_difference: Schema.Attribute.String;
     max_pipe_length: Schema.Attribute.String;
     outdoor_noise_level: Schema.Attribute.String;
@@ -30,6 +32,7 @@ export interface SharedSpecifications extends Struct.ComponentSchema {
     power_consumption_cooling: Schema.Attribute.String;
     power_consumption_heating: Schema.Attribute.String;
     power_supply_location: Schema.Attribute.String;
+    power_supply_type: Schema.Attribute.String;
     power_supply_voltage: Schema.Attribute.String;
     recommended_cooling_volume: Schema.Attribute.String;
     recommended_heating_volume: Schema.Attribute.String;

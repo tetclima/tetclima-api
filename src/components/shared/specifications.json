@@ -11,6 +11,9 @@
     "room_size": {
       "type": "string"
     },
+    "max_area_sqm": {
+      "type": "string"
+    },
     "heating_energy_class": {
       "type": "string"
     },
@@ -99,6 +102,13 @@
       "type": "string"
     },
     "eer_cooling": {
+      "type": "string"
+    },
+    "indoor_units_count": {
+      "type": "string",
+      "required": false
+    },
+    "power_supply_type": {
       "type": "string"
     }
   },

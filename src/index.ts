@@ -19,6 +19,13 @@ export default {
    * run jobs, or perform some special logic.
    */
   async bootstrap({ strapi }: { strapi: Core.Strapi }) {
+    const uploadCfg = strapi.config.get('plugin::upload') as {
+      provider?: string;
+    };
+    strapi.log.info(
+      `[tetclima] Active upload provider: ${uploadCfg?.provider ?? 'local (default)'}`,
+    );
+
     const flag = process.env.MOVE_MEDIA_FROM_API_UPLOADS_TO_ROOT;
     if (flag !== 'true' && flag !== '1') return;
 
